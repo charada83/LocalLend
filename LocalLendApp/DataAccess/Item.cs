@@ -25,12 +25,12 @@ namespace LocalLendApp.DataAccess
 
         [MaxLength(140)]
         public string ItemDescription { get; set; }
-        public byte[] ItemImage { get; set; }
+        public int ItemImage { get; set; }
 
         public Item()
         { }
 
-        public Item(string itemName, string itemDescription, byte[] itemImage)
+        public Item(string itemName, string itemDescription, int itemImage)
         {
             ItemName = itemName;
             ItemDescription = itemDescription;

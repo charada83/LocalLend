@@ -25,7 +25,7 @@ namespace LocalLendApp.DataAccess
             if (string.IsNullOrEmpty(DBLocation))
             {
                 DBLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                                                                    "LocalLendDB.db3");
+                                                                    "LocLend.db3");
 
                 InitialiseDB();
             }
@@ -43,12 +43,13 @@ namespace LocalLendApp.DataAccess
                     //TableQuery<Item> query = cxn.Table<Item>();
                     //if (query.Count() == 0)
                     //{
+                        
                     //    Item item = new Item()
                     //    {
-                    //        ItemName =
+                    //        ItemName = lend.txt
                     //        ItemDescription =
                     //        ItemImage =
-                    //    };
+                    //        };
 
                     //    cxn.Insert(item);
                     //}
@@ -67,7 +68,14 @@ namespace LocalLendApp.DataAccess
             {
                 using (SQLiteConnection cxn = new SQLiteConnection(DBStore.DBLocation))
                 {
-                    cxn.Insert(item);
+                    TableQuery<Item> query = cxn.Table<Item>();
+                    if (query.Count() == 0)
+                    {
+                        //cxn.Insert(new Item("Power Drill", "Powerful Tool", Resource.Drawable.powerdrill));
+                        //cxn.Insert(new Item("Wheelbarrow", "Good condition, can lend for up to 3 days", Resource.Drawable.wheelbarrow));
+                        cxn.Insert(item);
+                    }
+                    //cxn.Insert(item);
                 }
 
             }

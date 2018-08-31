@@ -17,13 +17,11 @@ namespace LocalLendApp
     [Activity(Label = "BorrowListActivity")]
     public class BorrowListActivity : Activity
     {
-        ItemAdapter itemAdapter;
         EditText txtSearch;
         ListView lvItems;
         List<Item> itemList = new List<Item>();
         //Button btnDeleteItem;
 
-        DBStore database = new DBStore();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -31,21 +29,17 @@ namespace LocalLendApp
 
             SetContentView(Resource.Layout.BorrowList);
             // Create your application here
-
-            txtSearch = FindViewById<EditText>(Resource.Id.txtSearch);
+            
             lvItems = FindViewById<ListView>(Resource.Id.lvViewItems);
+            txtSearch = FindViewById<EditText>(Resource.Id.txtSearch);
             //btnDeleteItem = FindViewById<Button>(Resource.Id.btnDeleteItem);
-
-
-
-            txtSearch.TextChanged += TxtSearch_TextChanged;
-
-            itemAdapter = new ItemAdapter(this, itemList);
-            lvItems.Adapter = itemAdapter;
 
             LoadItemsFromDataStore();
 
+            lvItems.Adapter = new ItemAdapter(this, itemList);     
+            
             lvItems.ItemClick += LvItems_ItemClick;
+            txtSearch.TextChanged += TxtSearch_TextChanged;
             // btnDeleteItem.Click += BtnDeleteItem_Click;
         }
 
@@ -56,7 +50,19 @@ namespace LocalLendApp
 
 
         //    };
-        //}
+        //}     
+
+        private void LoadItemsFromDataStore()
+        {
+            DBStore dbStore = new DBStore();
+
+            IEnumerable<Item> items = dbStore.GetItems();
+            itemList = items.ToList();
+
+            //itemList.Add(new Item("Power Drill", "Powerful Tool", Resource.Drawable.powerdrill));
+            //itemList.Add(new Item("Wheelbarrow", "Good condition, can lend for up to 3 days", Resource.Drawable.wheelbarrow));
+        }
+     
 
         private void LvItems_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
@@ -77,17 +83,9 @@ namespace LocalLendApp
                                         where item.ItemName.ToLower().Contains(itemToLower)
                                         select item).ToList<Item>();
 
-            itemAdapter = new ItemAdapter(this, searchedItems);
-            lvItems.Adapter = itemAdapter;
+            //itemAdapter = new ItemAdapter(this, searchedItems);
+            //lvItems.Adapter = itemAdapter;
 
-        }
-
-        private void LoadItemsFromDataStore()
-        {
-            itemList = database.SelectItemTable();
-
-            //itemList.Add(new Item("Power Drill", "Powerful Tool", Resource.Drawable.powerdrill));
-            //itemList.Add(new Item("Wheelbarrow", "Good condition, can lend for up to 3 days", Resource.Drawable.wheelbarrow));
         }
     }
 }

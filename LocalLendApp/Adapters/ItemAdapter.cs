@@ -41,6 +41,7 @@ namespace LocalLendApp.Adapters
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             var itemInfoRowView = convertView;
+            ItemAdapterViewHolder itemViewHolder = null;
             if (itemInfoRowView == null)
             {
                 var inflator = context.GetSystemService(Context.LayoutInflaterService).JavaCast<LayoutInflater>();
@@ -50,21 +51,22 @@ namespace LocalLendApp.Adapters
                 var lblItemNameView = itemInfoRowView.FindViewById<TextView>(Resource.Id.lblBorrowItemName);
                 var lblItemDescription = itemInfoRowView.FindViewById<TextView>(Resource.Id.lblBorrowItemDescription);               
 
-                var itemViewHolder = new ItemAdapterViewHolder(itemImageView, lblItemNameView, lblItemDescription);
+                itemViewHolder = new ItemAdapterViewHolder(itemImageView, lblItemNameView, lblItemDescription);
 
                 itemInfoRowView.Tag = itemViewHolder;
 
                 //itemImageView.Click += ItemImageView_Click;
             }
-            var cachedItemAdapterViewHolder = itemInfoRowView.Tag as ItemAdapterViewHolder;
-            //cachedItemAdapterViewHolder.ItemImage.SetImageResource(ItemList[position].ItemImage);
-            cachedItemAdapterViewHolder.ItemName.Text = ItemList[position].ItemName;
-            cachedItemAdapterViewHolder.ItemDescription.Text = ItemList[position].ItemDescription;
 
-            if (ItemList[position].ItemImage != null)
-            {
-                cachedItemAdapterViewHolder.ItemImage.SetImageBitmap(Android.Graphics.BitmapFactory.DecodeByteArray(ItemList[position].ItemImage, 0, ItemList[position].ItemImage.Length));
-            }         
+            itemViewHolder = itemInfoRowView.Tag as ItemAdapterViewHolder;
+            itemViewHolder.ItemImage.SetImageResource(ItemList[position].ItemImage);
+            itemViewHolder.ItemName.Text = ItemList[position].ItemName;
+            itemViewHolder.ItemDescription.Text = ItemList[position].ItemDescription;
+
+            //if (ItemList[position].ItemImage != null)
+            //{
+            //    cachedItemAdapterViewHolder.ItemImage.SetImageBitmap(Android.Graphics.BitmapFactory.DecodeByteArray(ItemList[position].ItemImage, 0, ItemList[position].ItemImage.Length));
+            //}         
 
             return itemInfoRowView;
         }
